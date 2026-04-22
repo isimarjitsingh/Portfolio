@@ -1,65 +1,84 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Photos = () => {
   const [showUploadForm, setShowUploadForm] = useState(false);
+  const [photoPosts, setPhotoPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [newPhoto, setNewPhoto] = useState({
     caption: '',
     category: 'study-setup'
   });
 
-  const photoPosts = [
-    {
-      id: 1,
-      author: 'Grace Lee',
-      avatar: 'GL',
-      caption: 'My productive study setup for final exams week! Multiple monitors help with research papers.',
-      category: 'study-setup',
-      imageUrl: null,
-      likes: 156,
-      comments: 28,
-      time: '3 hours ago'
-    },
-    {
-      id: 2,
-      author: 'Henry Zhang',
-      avatar: 'HZ',
-      caption: 'Beautiful sunset from the university library after a long coding session',
-      category: 'campus-life',
-      imageUrl: null,
-      likes: 89,
-      comments: 12,
-      time: '5 hours ago'
-    },
-    {
-      id: 3,
-      author: 'Isabella Martinez',
-      avatar: 'IM',
-      caption: 'Handwritten notes for organic chemistry. Color coding helps me remember complex reactions!',
-      category: 'notes',
-      imageUrl: null,
-      likes: 234,
-      comments: 45,
-      time: '1 day ago'
-    },
-    {
-      id: 4,
-      author: 'Jack Thompson',
-      avatar: 'JT',
-      caption: 'Team study session at the campus coffee shop. Great discussion about machine learning concepts!',
-      category: 'group-study',
-      imageUrl: null,
-      likes: 78,
-      comments: 15,
-      time: '2 days ago'
+  // Fetch photos from backend
+  const fetchPhotos = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/api/photos', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      setPhotoPosts(response.data.photos);
+    } catch (err) {
+      console.error('Error fetching photos:', err);
+      setError('Failed to load photos');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    fetchPhotos();
+  }, []);
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement API call to upload photo
-    console.log('New photo:', newPhoto);
-    setShowUploadForm(false);
-    setNewPhoto({ caption: '', category: 'study-setup' });
+    if (!selectedFile) {
+      setError('Please select a photo to upload');
+      return;
+    }
+
+    setUploading(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('token');
+      const formData = new FormData();
+      formData.append('photo', selectedFile);
+      formData.append('caption', newPhoto.caption);
+      formData.append('category', newPhoto.category);
+
+      await axios.post('http://localhost:5000/api/photos', formData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      // Refresh the photos list
+      await fetchPhotos();
+      
+      // Reset form
+      setShowUploadForm(false);
+      setNewPhoto({ caption: '', category: 'study-setup' });
+      setSelectedFile(null);
+    } catch (err) {
+      console.error('Error uploading photo:', err);
+      setError(err.response?.data?.message || 'Failed to upload photo');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const getCategoryColor = (category) => {
@@ -86,6 +105,12 @@ const Photos = () => {
           </button>
         </div>
 
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded mb-6">
+            {error}
+          </div>
+        )}
+
         {showUploadForm && (
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
             <h2 className="text-xl font-semibold mb-4">Share a Study Photo</h2>
@@ -101,7 +126,24 @@ const Photos = () => {
                       <p className="text-sm">Click to upload or drag and drop</p>
                       <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 10MB</p>
                     </div>
-                    <input type="file" className="hidden" accept="image/*" />
+                    <input 
+                      type="file" 
+                      className="hidden" 
+                      accept="image/*" 
+                      onChange={handleFileSelect}
+                      id="photo-upload"
+                    />
+                    <label 
+                      htmlFor="photo-upload"
+                      className="cursor-pointer inline-block mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    >
+                      Choose File
+                    </label>
+                    {selectedFile && (
+                      <p className="mt-2 text-sm text-gray-600">
+                        Selected: {selectedFile.name}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div>
@@ -134,8 +176,12 @@ const Photos = () => {
                   </select>
                 </div>
                 <div className="flex space-x-4">
-                  <button type="submit" className="btn btn-primary">
-                    Share Photo
+                  <button 
+                    type="submit" 
+                    disabled={uploading}
+                    className="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {uploading ? 'Uploading...' : 'Share Photo'}
                   </button>
                   <button
                     type="button"
@@ -151,48 +197,62 @@ const Photos = () => {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {photoPosts.map((photo) => (
-            <div key={photo.id} className="card overflow-hidden">
-              <div className="aspect-square bg-gray-200 flex items-center justify-center text-gray-400">
-                <div className="text-center">
-                  <div className="text-6xl mb-2">...</div>
-                  <p className="text-sm">Study Photo</p>
-                </div>
-              </div>
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                      {photo.avatar}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm">{photo.author}</p>
-                      <p className="text-xs text-gray-500">{photo.time}</p>
-                    </div>
-                  </div>
-                  <span className={`px-2 py-1 text-xs rounded-full ${getCategoryColor(photo.category)}`}>
-                    {photo.category.replace('-', ' ')}
-                  </span>
-                </div>
-                <p className="text-gray-700 text-sm mb-3">{photo.caption}</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <button className="flex items-center space-x-1 text-gray-600 hover:text-red-600">
-                      <span>...</span>
-                      <span className="text-sm">{photo.likes}</span>
-                    </button>
-                    <button className="flex items-center space-x-1 text-gray-600 hover:text-blue-600">
-                      <span>...</span>
-                      <span className="text-sm">{photo.comments}</span>
-                    </button>
-                  </div>
-                  <button className="text-gray-600 hover:text-blue-600">
-                    <span>...</span>
-                  </button>
-                </div>
-              </div>
+          {loading ? (
+            <div className="col-span-full text-center py-8">
+              <p className="text-gray-600">Loading photos...</p>
             </div>
-          ))}
+          ) : photoPosts.length === 0 ? (
+            <div className="col-span-full text-center py-8">
+              <p className="text-gray-600">No photos yet. Upload your first photo!</p>
+            </div>
+          ) : (
+            photoPosts.map((photo) => (
+              <div key={photo._id} className="card overflow-hidden">
+                <div className="aspect-square bg-gray-200 flex items-center justify-center text-gray-400">
+                  {photo.imageUrl ? (
+                    <img src={`http://localhost:5000${photo.imageUrl}`} alt={photo.caption} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="text-center">
+                      <div className="text-6xl mb-2">...</div>
+                      <p className="text-sm">Study Photo</p>
+                    </div>
+                  )}
+                </div>
+                <div className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                        {photo.user?.initials || 'U'}
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-800 text-sm">{photo.user?.name || 'Unknown User'}</p>
+                        <p className="text-xs text-gray-500">{new Date(photo.createdAt).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                    <span className={`px-2 py-1 text-xs rounded-full ${getCategoryColor(photo.category)}`}>
+                      {photo.category.replace('-', ' ')}
+                    </span>
+                  </div>
+                  <p className="text-gray-700 text-sm mb-3">{photo.caption}</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <button className="flex items-center space-x-1 text-gray-600 hover:text-red-600">
+                        <span>...</span>
+                        <span className="text-sm">{photo.likeCount || photo.likes?.length || 0}</span>
+                      </button>
+                      <button className="flex items-center space-x-1 text-gray-600 hover:text-blue-600">
+                        <span>...</span>
+                        <span className="text-sm">{photo.commentCount || photo.comments?.length || 0}</span>
+                      </button>
+                    </div>
+                    <button className="text-gray-600 hover:text-blue-600">
+                      <span>...</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

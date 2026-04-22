@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const StudyProgress = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [progressPosts, setProgressPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [newProgress, setNewProgress] = useState({
     title: '',
     description: '',
@@ -9,51 +13,49 @@ const StudyProgress = () => {
     progress: 0
   });
 
-  const progressPosts = [
-    {
-      id: 1,
-      author: 'Alice Johnson',
-      avatar: 'AJ',
-      title: 'Completed Advanced Algorithms Course',
-      description: 'Just finished my advanced algorithms course with a 92% score! The dynamic programming section was challenging but very rewarding.',
-      category: 'course',
-      progress: 100,
-      likes: 45,
-      comments: 12,
-      time: '2 hours ago'
-    },
-    {
-      id: 2,
-      author: 'Bob Smith',
-      avatar: 'BS',
-      title: 'Web Development Portfolio Progress',
-      description: 'Added 3 new projects to my portfolio today. Working on a React-based e-commerce site now.',
-      category: 'project',
-      progress: 75,
-      likes: 32,
-      comments: 8,
-      time: '5 hours ago'
-    },
-    {
-      id: 3,
-      author: 'Carol White',
-      avatar: 'CW',
-      title: 'Research Paper Milestone',
-      description: 'Completed the literature review section of my AI research paper. 2000 words down!',
-      category: 'research',
-      progress: 60,
-      likes: 28,
-      comments: 6,
-      time: '1 day ago'
+  // Fetch progress posts from backend
+  const fetchProgressPosts = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/api/progress', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      setProgressPosts(response.data.posts);
+    } catch (err) {
+      console.error('Error fetching progress posts:', err);
+      setError('Failed to load progress posts');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    fetchProgressPosts();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement API call to create progress post
-    console.log('New progress:', newProgress);
-    setShowCreateForm(false);
-    setNewProgress({ title: '', description: '', category: 'course', progress: 0 });
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post('http://localhost:5000/api/progress', newProgress, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      // Refresh the progress posts list
+      await fetchProgressPosts();
+      
+      // Reset form
+      setShowCreateForm(false);
+      setNewProgress({ title: '', description: '', category: 'course', progress: 0 });
+    } catch (err) {
+      console.error('Error creating progress post:', err);
+      setError(err.response?.data?.message || 'Failed to create progress post');
+    }
   };
 
   return (
@@ -68,6 +70,12 @@ const StudyProgress = () => {
             Share Progress
           </button>
         </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded mb-6">
+            {error}
+          </div>
+        )}
 
         {showCreateForm && (
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
@@ -148,57 +156,67 @@ const StudyProgress = () => {
         )}
 
         <div className="space-y-6">
-          {progressPosts.map((post) => (
-            <div key={post.id} className="card">
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                  {post.avatar}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-semibold text-gray-800">{post.author}</h3>
-                      <p className="text-sm text-gray-500">{post.time}</p>
-                    </div>
-                    <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
-                      {post.category}
-                    </span>
+          {loading ? (
+            <div className="text-center py-8">
+              <p className="text-gray-600">Loading progress posts...</p>
+            </div>
+          ) : progressPosts.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-gray-600">No progress posts yet. Share your first progress!</p>
+            </div>
+          ) : (
+            progressPosts.map((post) => (
+              <div key={post._id} className="card">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                    {post.user?.initials || 'U'}
                   </div>
-                  <h4 className="text-lg font-medium text-gray-900 mt-2">{post.title}</h4>
-                  <p className="text-gray-600 mt-1">{post.description}</p>
-                  
-                  {post.progress > 0 && (
-                    <div className="mt-3">
-                      <div className="flex justify-between text-sm text-gray-600 mb-1">
-                        <span>Progress</span>
-                        <span>{post.progress}%</span>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-semibold text-gray-800">{post.user?.name || 'Unknown User'}</h3>
+                        <p className="text-sm text-gray-500">{new Date(post.createdAt).toLocaleDateString()}</p>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div
-                          className="bg-blue-600 h-2 rounded-full"
-                          style={{ width: `${post.progress}%` }}
-                        ></div>
-                      </div>
+                      <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
+                        {post.category}
+                      </span>
                     </div>
-                  )}
+                    <h4 className="text-lg font-medium text-gray-900 mt-2">{post.title}</h4>
+                    <p className="text-gray-600 mt-1">{post.description}</p>
+                    
+                    {post.progress > 0 && (
+                      <div className="mt-3">
+                        <div className="flex justify-between text-sm text-gray-600 mb-1">
+                          <span>Progress</span>
+                          <span>{post.progress}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-blue-600 h-2 rounded-full"
+                            style={{ width: `${post.progress}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    )}
 
-                  <div className="flex items-center space-x-6 mt-4">
-                    <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600">
-                      <span>...</span>
-                      <span>{post.likes}</span>
-                    </button>
-                    <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600">
-                      <span>...</span>
-                      <span>{post.comments}</span>
-                    </button>
-                    <button className="text-gray-600 hover:text-blue-600">
-                      Share
-                    </button>
+                    <div className="flex items-center space-x-6 mt-4">
+                      <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600">
+                        <span>...</span>
+                        <span>{post.likeCount || post.likes?.length || 0}</span>
+                      </button>
+                      <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600">
+                        <span>...</span>
+                        <span>{post.commentCount || post.comments?.length || 0}</span>
+                      </button>
+                      <button className="text-gray-600 hover:text-blue-600">
+                        Share
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>

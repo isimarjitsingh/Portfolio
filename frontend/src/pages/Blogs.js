@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Blogs = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [newBlog, setNewBlog] = useState({
     title: '',
     content: '',
@@ -9,57 +13,54 @@ const Blogs = () => {
     category: 'study-tips'
   });
 
-  const blogPosts = [
-    {
-      id: 1,
-      author: 'David Chen',
-      avatar: 'DC',
-      title: 'Effective Study Techniques for STEM Students',
-      excerpt: 'Discover proven methods to improve your understanding of complex scientific concepts and mathematical problems...',
-      content: 'In this comprehensive guide, I share my top study techniques that helped me excel in my STEM courses...',
-      category: 'study-tips',
-      tags: ['study-tips', 'stem', 'productivity'],
-      readTime: '5 min read',
-      likes: 89,
-      comments: 23,
-      time: '1 day ago'
-    },
-    {
-      id: 2,
-      author: 'Emma Wilson',
-      avatar: 'EW',
-      title: 'Balancing Part-time Work and Studies',
-      excerpt: 'Practical tips for managing your time effectively when juggling work and academic responsibilities...',
-      content: 'Working while studying can be challenging, but with the right strategies, you can succeed at both...',
-      category: 'lifestyle',
-      tags: ['time-management', 'work-life-balance', 'student-life'],
-      readTime: '7 min read',
-      likes: 67,
-      comments: 15,
-      time: '2 days ago'
-    },
-    {
-      id: 3,
-      author: 'Frank Miller',
-      avatar: 'FM',
-      title: 'Introduction to Machine Learning Algorithms',
-      excerpt: 'A beginner-friendly overview of common ML algorithms and their practical applications...',
-      content: 'Machine learning is transforming industries, and understanding the basics is essential for modern developers...',
-      category: 'technical',
-      tags: ['machine-learning', 'algorithms', 'programming'],
-      readTime: '10 min read',
-      likes: 124,
-      comments: 34,
-      time: '3 days ago'
+  // Fetch blog posts from backend
+  const fetchBlogPosts = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/api/blogs', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      setBlogPosts(response.data.posts);
+    } catch (err) {
+      console.error('Error fetching blog posts:', err);
+      setError('Failed to load blog posts');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    fetchBlogPosts();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement API call to create blog post
-    console.log('New blog:', newBlog);
-    setShowCreateForm(false);
-    setNewBlog({ title: '', content: '', tags: '', category: 'study-tips' });
+    try {
+      const token = localStorage.getItem('token');
+      const blogData = {
+        ...newBlog,
+        tags: newBlog.tags ? newBlog.tags.split(',').map(tag => tag.trim()) : []
+      };
+      
+      await axios.post('http://localhost:5000/api/blogs', blogData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      // Refresh the blog posts list
+      await fetchBlogPosts();
+      
+      // Reset form
+      setShowCreateForm(false);
+      setNewBlog({ title: '', content: '', tags: '', category: 'study-tips' });
+    } catch (err) {
+      console.error('Error creating blog post:', err);
+      setError(err.response?.data?.message || 'Failed to create blog post');
+    }
   };
 
   return (
@@ -74,6 +75,12 @@ const Blogs = () => {
             Write Blog
           </button>
         </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded mb-6">
+            {error}
+          </div>
+        )}
 
         {showCreateForm && (
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
@@ -154,51 +161,63 @@ const Blogs = () => {
         )}
 
         <div className="space-y-6">
-          {blogPosts.map((post) => (
-            <article key={post.id} className="card">
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
-                  {post.avatar}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-2">
-                    <div>
-                      <h3 className="font-semibold text-gray-800">{post.author}</h3>
-                      <p className="text-sm text-gray-500">{post.time} · {post.readTime}</p>
-                    </div>
-                    <span className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">
-                      {post.category}
-                    </span>
+          {loading ? (
+            <div className="text-center py-8">
+              <p className="text-gray-600">Loading blog posts...</p>
+            </div>
+          ) : blogPosts.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-gray-600">No blog posts yet. Write your first blog!</p>
+            </div>
+          ) : (
+            blogPosts.map((post) => (
+              <article key={post._id} className="card">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
+                    {post.user?.initials || 'U'}
                   </div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-2">{post.title}</h2>
-                  <p className="text-gray-600 mb-3">{post.excerpt}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {post.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
-                      >
-                        #{tag}
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between mb-2">
+                      <div>
+                        <h3 className="font-semibold text-gray-800">{post.user?.name || 'Unknown User'}</h3>
+                        <p className="text-sm text-gray-500">
+                          {new Date(post.createdAt).toLocaleDateString()} · {post.readTime ? `${post.readTime} min read` : '5 min read'}
+                        </p>
+                      </div>
+                      <span className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">
+                        {post.category}
                       </span>
-                    ))}
-                  </div>
-                  <div className="flex items-center space-x-6">
-                    <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600">
-                      <span>...</span>
-                      <span>{post.likes}</span>
-                    </button>
-                    <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600">
-                      <span>...</span>
-                      <span>{post.comments}</span>
-                    </button>
-                    <button className="text-gray-600 hover:text-blue-600">
-                      Read More
-                    </button>
+                    </div>
+                    <h2 className="text-xl font-bold text-gray-900 mb-2">{post.title}</h2>
+                    <p className="text-gray-600 mb-3">{post.excerpt || post.content.substring(0, 150) + '...'}</p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {post.tags?.map((tag, index) => (
+                        <span
+                          key={index}
+                          className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex items-center space-x-6">
+                      <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600">
+                        <span>...</span>
+                        <span>{post.likeCount || post.likes?.length || 0}</span>
+                      </button>
+                      <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-600">
+                        <span>...</span>
+                        <span>{post.commentCount || post.comments?.length || 0}</span>
+                      </button>
+                      <button className="text-gray-600 hover:text-blue-600">
+                        Read More
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            ))
+          )}
         </div>
       </div>
     </div>

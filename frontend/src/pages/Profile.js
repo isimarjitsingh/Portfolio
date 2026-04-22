@@ -1,9 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 
 const Profile = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('progress');
+  const [userStats, setUserStats] = useState({
+    progressPosts: 0,
+    blogPosts: 0,
+    photoPosts: 0,
+    followers: 0,
+    following: 0,
+    totalPosts: 0
+  });
+
+  // Fetch user statistics
+  const fetchUserStats = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/api/stats/user', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      setUserStats(response.data.stats);
+    } catch (err) {
+      console.error('Error fetching user stats:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchUserStats();
+    }
+  }, [user]);
 
   if (!user) {
     return (
@@ -31,6 +61,39 @@ const Profile = () => {
             <button className="btn btn-primary">
               Edit Profile
             </button>
+          </div>
+        </div>
+
+        {/* User Statistics */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Profile Statistics</h2>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="text-center p-4 bg-blue-50 rounded-lg">
+              <div className="text-2xl font-bold text-blue-600">{userStats.totalPosts}</div>
+              <div className="text-sm text-gray-600">Total Posts</div>
+            </div>
+            <div className="text-center p-4 bg-green-50 rounded-lg">
+              <div className="text-2xl font-bold text-green-600">{userStats.progressPosts}</div>
+              <div className="text-sm text-gray-600">Progress Posts</div>
+            </div>
+            <div className="text-center p-4 bg-purple-50 rounded-lg">
+              <div className="text-2xl font-bold text-purple-600">{userStats.blogPosts}</div>
+              <div className="text-sm text-gray-600">Blog Posts</div>
+            </div>
+            <div className="text-center p-4 bg-yellow-50 rounded-lg">
+              <div className="text-2xl font-bold text-yellow-600">{userStats.photoPosts}</div>
+              <div className="text-sm text-gray-600">Photo Posts</div>
+            </div>
+            <div className="text-center p-4 bg-red-50 rounded-lg">
+              <div className="text-2xl font-bold text-red-600">{userStats.followers}</div>
+              <div className="text-sm text-gray-600">Followers</div>
+            </div>
+          </div>
+          <div className="mt-4 text-center">
+            <div className="inline-flex items-center space-x-8 text-sm text-gray-600">
+              <span>Following: <strong className="text-gray-800">{userStats.following}</strong></span>
+              <span>Followers: <strong className="text-gray-800">{userStats.followers}</strong></span>
+            </div>
           </div>
         </div>
 

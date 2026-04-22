@@ -7,8 +7,8 @@ const router = express.Router();
 
 // @route   GET /api/blogs
 // @desc    Get all published blog posts
-// @access  Public
-router.get('/', async (req, res) => {
+// @access  Private
+router.get('/', auth, async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
