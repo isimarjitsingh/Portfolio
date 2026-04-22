@@ -1,0 +1,33 @@
+MongoDB Compass Connection Instructions
+=====================================
+
+Your MongoDB URI:
+mongodb+srv://mesimarjitsingh_db_user:karan123@cluster0.nvpslph.mongodb.net/college-media?appName=Cluster0
+
+How to connect with MongoDB Compass:
+1. Open MongoDB Compass
+2. Click "New Connection"
+3. In the connection string field, paste:
+   mongodb+srv://mesimarjitsingh_db_user:karan123@cluster0.nvpslph.mongodb.net/college-media?appName=Cluster0
+4. Click "Connect"
+
+Database: college-media
+Collections that should be visible:
+- users
+- studyprogresses
+- blogs
+- photos
+
+If collections are not visible:
+1. Check that you're connected to the correct database (college-media)
+2. Refresh the connection by clicking the refresh button
+3. Make sure the backend is running and has created data
+
+Test Data Created:
+- Test user: test@student.com / password123
+- Test progress post
+
+To verify data is being saved:
+1. Start the backend server
+2. Create a new account through the frontend
+3. Check MongoDB Compass for the new user in the 'users' collection
