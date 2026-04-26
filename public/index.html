@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management System - Professional Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h1>School Management System</h1>
+                    </div>
+                    <p class="login-subtitle">Professional Education Management Platform</p>
+                </div>
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="username" placeholder="Username" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Sign In
+                    </button>
+                </form>
+                <div class="demo-credentials">
+                    <p><strong>Demo Credentials:</strong></p>
+                    <p>Admin: admin / admin123</p>
+                    <p>Teacher: john_teacher / teacher123</p>
+                    <p>Student: student1 / student123</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboardScreen" class="dashboard-screen hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h2>School MS</h2>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item active" data-page="dashboard">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-page="students">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>Students</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-page="teachers">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>Teachers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-page="classes">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-door-open"></i>
+                            <span>Classes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-page="subjects">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-book"></i>
+                            <span>Subjects</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-page="attendance">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Attendance</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-page="grades">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Grades</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <p class="user-name" id="userName">Admin User</p>
+                        <p class="user-role" id="userRole">Administrator</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    <div class="header-actions">
+                        <button class="notification-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <button class="settings-btn">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Dashboard Page -->
+                <div id="dashboardPage" class="page active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon blue">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 class="stat-number" id="totalStudents">0</h3>
+                                <p class="stat-label">Total Students</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 class="stat-number" id="totalTeachers">0</h3>
+                                <p class="stat-label">Total Teachers</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple">
+                                <i class="fas fa-door-open"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 class="stat-number" id="totalClasses">0</h3>
+                                <p class="stat-label">Total Classes</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon orange">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 class="stat-number" id="totalSubjects">0</h3>
+                                <p class="stat-label">Total Subjects</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Recent Activities</h3>
+                                <button class="card-action">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                            <div class="card-content">
+                                <div class="activity-list">
+                                    <div class="activity-item">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-user-plus"></i>
+                                        </div>
+                                        <div class="activity-details">
+                                            <p class="activity-text">New student enrolled</p>
+                                            <span class="activity-time">2 hours ago</span>
+                                        </div>
+                                    </div>
+                                    <div class="activity-item">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div class="activity-details">
+                                            <p class="activity-text">Attendance marked for Class 10A</p>
+                                            <span class="activity-time">3 hours ago</span>
+                                        </div>
+                                    </div>
+                                    <div class="activity-item">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-chart-bar"></i>
+                                        </div>
+                                        <div class="activity-details">
+                                            <p class="activity-text">Grades updated for Mathematics</p>
+                                            <span class="activity-time">5 hours ago</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Quick Actions</h3>
+                                <button class="card-action">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                            <div class="card-content">
+                                <div class="quick-actions">
+                                    <button class="quick-action-btn" onclick="showAddStudentModal()">
+                                        <i class="fas fa-user-plus"></i>
+                                        <span>Add Student</span>
+                                    </button>
+                                    <button class="quick-action-btn" onclick="showAttendanceModal()">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <span>Mark Attendance</span>
+                                    </button>
+                                    <button class="quick-action-btn" onclick="showGradeModal()">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Add Grades</span>
+                                    </button>
+                                    <button class="quick-action-btn" onclick="generateReport()">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>Generate Report</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Students Page -->
+                <div id="studentsPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title-section">
+                            <h2>Students Management</h2>
+                            <p>Manage student information and records</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="showAddStudentModal()">
+                            <i class="fas fa-plus"></i>
+                            Add Student
+                        </button>
+                    </div>
+                    <div class="data-table-container">
+                        <table class="data-table" id="studentsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Grade</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTableBody">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Teachers Page -->
+                <div id="teachersPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title-section">
+                            <h2>Teachers Management</h2>
+                            <p>Manage teacher information and assignments</p>
+                        </div>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Add Teacher
+                        </button>
+                    </div>
+                    <div class="data-table-container">
+                        <table class="data-table" id="teachersTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Experience</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teachersTableBody">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Classes Page -->
+                <div id="classesPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title-section">
+                            <h2>Classes Management</h2>
+                            <p>Manage class schedules and assignments</p>
+                        </div>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Add Class
+                        </button>
+                    </div>
+                    <div class="data-table-container">
+                        <table class="data-table" id="classesTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Class Name</th>
+                                    <th>Grade</th>
+                                    <th>Section</th>
+                                    <th>Teacher</th>
+                                    <th>Room</th>
+                                    <th>Capacity</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="classesTableBody">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Subjects Page -->
+                <div id="subjectsPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title-section">
+                            <h2>Subjects Management</h2>
+                            <p>Manage subjects and curriculum</p>
+                        </div>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Add Subject
+                        </button>
+                    </div>
+                    <div class="data-table-container">
+                        <table class="data-table" id="subjectsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Subject Name</th>
+                                    <th>Code</th>
+                                    <th>Department</th>
+                                    <th>Credits</th>
+                                    <th>Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subjectsTableBody">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Attendance Page -->
+                <div id="attendancePage" class="page">
+                    <div class="page-header">
+                        <div class="page-title-section">
+                            <h2>Attendance Management</h2>
+                            <p>Track and manage student attendance</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="showAttendanceModal()">
+                            <i class="fas fa-plus"></i>
+                            Mark Attendance
+                        </button>
+                    </div>
+                    <div class="attendance-filters">
+                        <select id="attendanceClassSelect" class="form-select">
+                            <option value="">Select Class</option>
+                        </select>
+                        <input type="date" id="attendanceDate" class="form-input">
+                        <button class="btn btn-secondary" onclick="loadAttendance()">
+                            <i class="fas fa-search"></i>
+                            Load Attendance
+                        </button>
+                    </div>
+                    <div class="data-table-container">
+                        <table class="data-table" id="attendanceTable">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Status</th>
+                                    <th>Check In</th>
+                                    <th>Check Out</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTableBody">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Grades Page -->
+                <div id="gradesPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title-section">
+                            <h2>Grades Management</h2>
+                            <p>Manage student grades and performance</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="showGradeModal()">
+                            <i class="fas fa-plus"></i>
+                            Add Grade
+                        </button>
+                    </div>
+                    <div class="grades-filters">
+                        <select id="gradesStudentSelect" class="form-select">
+                            <option value="">Select Student</option>
+                        </select>
+                        <select id="gradesSubjectSelect" class="form-select">
+                            <option value="">Select Subject</option>
+                        </select>
+                        <button class="btn btn-secondary" onclick="loadGrades()">
+                            <i class="fas fa-search"></i>
+                            Load Grades
+                        </button>
+                    </div>
+                    <div class="data-table-container">
+                        <table class="data-table" id="gradesTable">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Exam Type</th>
+                                    <th>Date</th>
+                                    <th>Marks</th>
+                                    <th>Total</th>
+                                    <th>Percentage</th>
+                                    <th>Grade</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="gradesTableBody">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modalOverlay" class="modal-overlay hidden">
+        <!-- Add Student Modal -->
+        <div id="addStudentModal" class="modal hidden">
+            <div class="modal-header">
+                <h3>Add New Student</h3>
+                <button class="modal-close" onclick="closeModal('addStudentModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addStudentForm" class="form-grid">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" name="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" name="dateOfBirth" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Grade Level</label>
+                        <input type="number" name="gradeLevel" min="1" max="12" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Parent Name</label>
+                        <input type="text" name="parentName">
+                    </div>
+                    <div class="form-group">
+                        <label>Parent Phone</label>
+                        <input type="tel" name="parentPhone">
+                    </div>
+                    <div class="form-group">
+                        <label>Parent Email</label>
+                        <input type="email" name="parentEmail">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addStudentModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addStudent()">Add Student</button>
+            </div>
+        </div>
+
+        <!-- Attendance Modal -->
+        <div id="attendanceModal" class="modal hidden">
+            <div class="modal-header">
+                <h3>Mark Attendance</h3>
+                <button class="modal-close" onclick="closeModal('attendanceModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="attendance-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Class</label>
+                            <select id="attendanceModalClass" class="form-select">
+                                <option value="">Select Class</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <select id="attendanceModalSubject" class="form-select">
+                                <option value="">Select Subject</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="attendanceModalDate" class="form-input">
+                        </div>
+                    </div>
+                    <div class="attendance-list" id="attendanceList">
+                        <!-- Students list will be populated here -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('attendanceModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveAttendance()">Save Attendance</button>
+            </div>
+        </div>
+
+        <!-- Grade Modal -->
+        <div id="gradeModal" class="modal hidden">
+            <div class="modal-header">
+                <h3>Add Grade</h3>
+                <button class="modal-close" onclick="closeModal('gradeModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="gradeForm" class="form-grid">
+                    <div class="form-group">
+                        <label>Student</label>
+                        <select name="studentId" required>
+                            <option value="">Select Student</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <select name="subjectId" required>
+                            <option value="">Select Subject</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Class</label>
+                        <select name="classId" required>
+                            <option value="">Select Class</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Exam Type</label>
+                        <select name="examType" required>
+                            <option value="">Select Exam Type</option>
+                            <option value="Midterm">Midterm</option>
+                            <option value="Final">Final</option>
+                            <option value="Quiz">Quiz</option>
+                            <option value="Assignment">Assignment</option>
+                            <option value="Project">Project</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Exam Date</label>
+                        <input type="date" name="examDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Marks Obtained</label>
+                        <input type="number" name="marksObtained" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Marks</label>
+                        <input type="number" name="totalMarks" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Academic Year</label>
+                        <input type="text" name="academicYear" value="2024-2025" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Remarks</label>
+                        <textarea name="remarks" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('gradeModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addGrade()">Add Grade</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <div class="toast-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="toastMessage">Operation completed successfully!</span>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
