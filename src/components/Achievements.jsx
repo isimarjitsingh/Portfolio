@@ -46,7 +46,7 @@ const Achievements = () => {
   };
 
   return (
-    <section id="achievements" className="py-20 px-6 bg-dark-secondary/30 relative overflow-hidden">
+    <section id="achievements" className="py-16 sm:py-20 lg:py-24 xl:py-28 px-4 sm:px-6 lg:px-8 xl:px-12 bg-dark-secondary/30 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-10 left-10 w-3 h-3 bg-yellow-500 rounded-full opacity-30 animate-pulse" style={{ animation: 'float 4s ease-in-out infinite' }}></div>
@@ -54,14 +54,14 @@ const Achievements = () => {
         <div className="absolute bottom-20 left-1/3 w-4 h-4 bg-cyan-500 rounded-full opacity-20 animate-pulse" style={{ animation: 'float 5s ease-in-out infinite 0.5s' }}></div>
       </div>
       
-      <div className="container mx-auto relative z-10">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
+      <div className="container mx-auto relative z-10 max-w-7xl xl:max-w-8xl 2xl:max-w-9xl">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-center mb-12 sm:mb-16 lg:mb-20">
           <span className="bg-gradient-to-r from-purple-500 to-cyan-400 bg-clip-text text-transparent hover:from-purple-400 hover:to-cyan-300 transition-all duration-500">
             Achievements
           </span>
         </h2>
         
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto">
           {achievements.map((achievement, index) => (
             <div 
               key={index} 
@@ -75,35 +75,36 @@ const Achievements = () => {
               <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryColor(achievement.category)} rounded-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500 blur-sm`}></div>
               
               {/* Main content card */}
-              <div className="relative bg-dark-bg border border-gray-800 rounded-xl p-6 hover:border-purple-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
+              <div className="relative bg-dark-bg border border-gray-800 rounded-xl p-4 sm:p-6 lg:p-8 hover:border-purple-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-4">
-                    <div className="text-4xl transform transition-all duration-500 group-hover:scale-125 group-hover:rotate-12 drop-shadow-lg group-hover:drop-shadow-2xl group-hover:drop-shadow-yellow-500/50">
+                  <div className="flex items-start gap-3 sm:gap-4 lg:gap-6">
+                    <div className="text-3xl sm:text-4xl lg:text-5xl transform transition-all duration-500 group-hover:scale-125 group-hover:rotate-12 drop-shadow-lg group-hover:drop-shadow-2xl group-hover:drop-shadow-yellow-500/50">
                       {achievement.icon}
                     </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-white mb-1 transform transition-all duration-300 group-hover:scale-105 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-cyan-400 group-hover:bg-clip-text cursor-default">
+                    <div className="flex-1">
+                      <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-1 sm:mb-2 transform transition-all duration-300 group-hover:scale-105 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-cyan-400 group-hover:bg-clip-text cursor-default">
                         {achievement.title}
                       </h3>
-                      <p className="text-purple-400 font-medium transition-all duration-300 group-hover:text-purple-300 group-hover:font-semibold">
-                        {achievement.event}
-                      </p>
+                      <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 text-gray-300">
+                        <span className="text-purple-400 font-medium transition-all duration-300 group-hover:text-purple-300 group-hover:font-semibold text-sm sm:text-base lg:text-lg">{achievement.event}</span>
+                        <span className="text-gray-500 text-sm sm:text-base lg:text-lg">•</span>
+                        <span className="text-sm sm:text-base lg:text-lg transition-colors duration-300 group-hover:text-gray-200">{achievement.year}</span>
+                      </div>
                     </div>
                   </div>
-                  <span className="text-sm text-gray-400 bg-gray-800 px-2 py-1 rounded transition-all duration-300 group-hover:bg-purple-900/50 group-hover:text-purple-300 group-hover:scale-110">
+                  <span className="text-xs sm:text-sm lg:text-base text-gray-400 bg-gray-800 px-2 py-1 sm:px-3 sm:py-1.5 rounded transition-all duration-300 group-hover:bg-purple-900/50 group-hover:text-purple-300 group-hover:scale-110">
                     {achievement.year}
                   </span>
                 </div>
                 
                 {/* Description */}
-                <p className="text-gray-300 text-sm leading-relaxed transition-all duration-300 group-hover:text-gray-200 group-hover:font-medium">
+                <p className="text-gray-300 text-xs sm:text-sm lg:text-base leading-relaxed transition-all duration-300 group-hover:text-gray-200 group-hover:font-medium mb-3 sm:mb-4 lg:mb-6">
                   {achievement.description}
                 </p>
                 
-                {/* Enhanced Category Badge */}
-                <div className="mt-4">
-                  <span className={`inline-block px-3 py-1 bg-gradient-to-r ${getCategoryColor(achievement.category)} text-white text-xs rounded-full font-medium transform transition-all duration-300 group-hover:scale-110 hover:shadow-lg hover:shadow-purple-500/30 relative overflow-hidden group/badge`}>
+                <div className="mt-3 sm:mt-4 lg:mt-6">
+                  <span className={`inline-block px-2 py-1 sm:px-3 sm:py-1.5 lg:px-4 lg:py-2 bg-gradient-to-r ${getCategoryColor(achievement.category)} text-white text-xs sm:text-sm lg:text-base rounded-full font-medium transform transition-all duration-300 group-hover:scale-110 hover:shadow-lg hover:shadow-purple-500/30 relative overflow-hidden group/badge`}>
                     {/* Badge background animation */}
                     <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform scale-x-0 group-hover/badge:scale-x-100 transition-transform duration-500 origin-left"></div>
                     <span className="relative z-10">{achievement.category.charAt(0).toUpperCase() + achievement.category.slice(1)}</span>

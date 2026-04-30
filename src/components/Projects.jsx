@@ -21,7 +21,7 @@ const Projects = () => {
   ];
 
   return (
-    <section id="projects" className="py-20 px-6 relative overflow-hidden">
+    <section id="projects" className="py-16 sm:py-20 lg:py-24 xl:py-28 px-4 sm:px-6 lg:px-8 xl:px-12 relative overflow-hidden">
       {/* Animated background particles */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-2 h-2 bg-purple-500 rounded-full opacity-50 animate-pulse" style={{ animation: 'float 3s ease-in-out infinite' }}></div>
@@ -29,14 +29,14 @@ const Projects = () => {
         <div className="absolute bottom-20 left-1/4 w-2 h-2 bg-purple-400 rounded-full opacity-40 animate-pulse" style={{ animation: 'float 3.5s ease-in-out infinite 0.5s' }}></div>
       </div>
       
-      <div className="container mx-auto relative z-10">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
+      <div className="container mx-auto relative z-10 max-w-7xl xl:max-w-8xl 2xl:max-w-9xl">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-center mb-12 sm:mb-16 lg:mb-20">
           <span className="bg-gradient-to-r from-purple-500 to-cyan-400 bg-clip-text text-transparent hover:from-purple-400 hover:to-cyan-300 transition-all duration-500">
             Projects
           </span>
         </h2>
         
-        <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 max-w-6xl lg:max-w-7xl xl:max-w-8xl mx-auto">
           {projects.map((project, index) => (
             <div 
               key={index} 
@@ -50,46 +50,46 @@ const Projects = () => {
               <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} rounded-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500 blur-sm`}></div>
               
               {/* Main content card */}
-              <div className="relative bg-dark-bg rounded-xl p-6 h-full hover:transform hover:scale-105 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-500/20 border border-gray-800 hover:border-purple-500/50">
+              <div className="relative bg-dark-bg rounded-xl p-4 sm:p-6 lg:p-8 h-full hover:transform hover:scale-105 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-500/20 border border-gray-800 hover:border-purple-500/50">
                 {/* Header with icon and GitHub link */}
-                <div className="flex justify-between items-start mb-4">
-                  <div className="text-3xl transform transition-all duration-500 group-hover:scale-150 group-hover:rotate-180 drop-shadow-lg group-hover:drop-shadow-2xl group-hover:drop-shadow-purple-500/50">
+                <div className="flex justify-between items-start mb-3 sm:mb-4 lg:mb-6">
+                  <div className="text-2xl sm:text-3xl lg:text-4xl transform transition-all duration-500 group-hover:scale-150 group-hover:rotate-180 drop-shadow-lg group-hover:drop-shadow-2xl group-hover:drop-shadow-purple-500/50">
                     {project.icon}
                   </div>
                   <a 
                     href={project.githubLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group/link text-gray-400 hover:text-white transition-all duration-300 transform hover:scale-125 hover:rotate-12 bg-gray-800/50 p-2 rounded-lg hover:bg-purple-900/50"
+                    className="group/link text-gray-400 hover:text-white transition-all duration-300 transform hover:scale-125 hover:rotate-12 bg-gray-800/50 p-2 sm:p-3 rounded-lg hover:bg-purple-900/50"
                   >
-                    <svg className="w-6 h-6 transform transition-all duration-300 group-hover/link:scale-110" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 transform transition-all duration-300 group-hover/link:scale-110" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                     </svg>
                   </a>
                 </div>
                 
                 {/* Project title with enhanced hover effect */}
-                <h3 className="text-xl font-bold text-white mb-3 transform transition-all duration-500 group-hover:scale-110 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-cyan-400 group-hover:bg-clip-text cursor-default">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-2 sm:mb-3 lg:mb-4 transform transition-all duration-500 group-hover:scale-110 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-cyan-400 group-hover:bg-clip-text cursor-default">
                   {project.title}
                 </h3>
                 
                 {/* Description with hover effect */}
-                <p className="text-gray-300 text-sm mb-4 line-clamp-3 transition-all duration-500 group-hover:text-gray-200 group-hover:font-medium">
+                <p className="text-gray-300 text-xs sm:text-sm lg:text-base mb-3 sm:mb-4 lg:mb-6 line-clamp-3 transition-all duration-500 group-hover:text-gray-200 group-hover:font-medium">
                   {project.description}
                 </p>
                 
                 {/* Technologies with enhanced hover */}
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 lg:gap-3">
                   {project.technologies.map((tech, techIndex) => (
                     <span 
                       key={tech}
-                      className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-xs border border-gray-700 hover:border-purple-500 hover:bg-purple-900/30 hover:text-purple-300 transition-all duration-500 transform hover:scale-110 hover:-translate-y-2 hover:shadow-lg hover:shadow-purple-500/30 relative overflow-hidden group/tech"
+                      className="px-2 py-1 sm:px-3 sm:py-1.5 lg:px-4 lg:py-2 bg-gray-800 text-gray-300 rounded-full text-xs sm:text-sm lg:text-base border border-gray-700 hover:border-purple-500 hover:bg-purple-900/30 hover:text-purple-300 transition-all duration-500 transform hover:scale-110 hover:-translate-y-2 hover:shadow-lg hover:shadow-purple-500/30 relative overflow-hidden group/tech"
                       style={{
                         animationDelay: `${techIndex * 100}ms`,
                         animation: 'fadeInUp 0.6s ease-out forwards'
                       }}
                     >
-                      {/* Tech pill background animation */}
+                      {/* Tech badge background animation */}
                       <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-cyan-600/20 transform scale-x-0 group-hover/tech:scale-x-100 transition-transform duration-500 origin-left"></div>
                       <span className="relative z-10">{tech}</span>
                     </span>

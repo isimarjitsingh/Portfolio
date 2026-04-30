@@ -43,7 +43,7 @@ const OpenSource = () => {
   ];
 
   return (
-    <section id="opensource" className="py-20 px-6 relative overflow-hidden">
+    <section id="opensource" className="py-16 sm:py-20 lg:py-24 xl:py-28 px-4 sm:px-6 lg:px-8 xl:px-12 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-15 left-20 w-3 h-3 bg-cyan-500 rounded-full opacity-30 animate-pulse" style={{ animation: 'float 4.5s ease-in-out infinite' }}></div>
@@ -51,14 +51,14 @@ const OpenSource = () => {
         <div className="absolute bottom-30 left-1/4 w-4 h-4 bg-green-500 rounded-full opacity-20 animate-pulse" style={{ animation: 'float 5.5s ease-in-out infinite 0.8s' }}></div>
       </div>
       
-      <div className="container mx-auto relative z-10">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
+      <div className="container mx-auto relative z-10 max-w-7xl xl:max-w-8xl 2xl:max-w-9xl">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-center mb-12 sm:mb-16 lg:mb-20">
           <span className="bg-gradient-to-r from-purple-500 to-cyan-400 bg-clip-text text-transparent hover:from-purple-400 hover:to-cyan-300 transition-all duration-500">
             Open Source
           </span>
         </h2>
         
-        <div className="max-w-6xl mx-auto space-y-8">
+        <div className="max-w-6xl lg:max-w-7xl xl:max-w-8xl mx-auto space-y-6 sm:space-y-8 lg:space-y-10">
           {contributions.map((contribution, index) => (
             <div 
               key={index} 
@@ -72,25 +72,25 @@ const OpenSource = () => {
               <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-cyan-600/20 rounded-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500 blur-sm"></div>
               
               {/* Main content card */}
-              <div className="relative bg-dark-bg border border-gray-800 rounded-xl p-8 hover:border-purple-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
+              <div className="relative bg-dark-bg border border-gray-800 rounded-xl p-4 sm:p-6 lg:p-8 hover:border-purple-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
                 {/* Header */}
-                <div className="flex items-start gap-6 mb-6">
-                  <div className="text-5xl transform transition-all duration-500 group-hover:scale-125 group-hover:rotate-12 drop-shadow-lg group-hover:drop-shadow-2xl group-hover:drop-shadow-cyan-500/50">
+                <div className="flex items-start gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6 lg:mb-8">
+                  <div className="text-3xl sm:text-4xl lg:text-5xl transform transition-all duration-500 group-hover:scale-125 group-hover:rotate-12 drop-shadow-lg group-hover:drop-shadow-2xl group-hover:drop-shadow-cyan-500/50">
                     {contribution.icon}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-white mb-2 transform transition-all duration-300 group-hover:scale-105 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-cyan-400 group-hover:bg-clip-text cursor-default">
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-1 sm:mb-2 transform transition-all duration-300 group-hover:scale-105 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-cyan-400 group-hover:bg-clip-text cursor-default">
                       {contribution.organization}
                     </h3>
-                    <div className="flex items-center gap-4 text-gray-300">
-                      <span className="text-purple-400 font-medium transition-all duration-300 group-hover:text-purple-300 group-hover:font-semibold">{contribution.role}</span>
-                      <span className="text-gray-500">•</span>
-                      <span className="transition-colors duration-300 group-hover:text-gray-200">{contribution.period}</span>
+                    <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 text-gray-300 mb-2 sm:mb-3">
+                      <span className="text-purple-400 font-medium transition-all duration-300 group-hover:text-purple-300 group-hover:font-semibold text-sm sm:text-base lg:text-lg">{contribution.role}</span>
+                      <span className="text-gray-500 text-sm sm:text-base lg:text-lg">•</span>
+                      <span className="text-sm sm:text-base lg:text-lg transition-colors duration-300 group-hover:text-gray-200">{contribution.period}</span>
                     </div>
-                    <div className="mt-2">
-                      <span className="inline-block px-3 py-1 bg-accent/20 text-accent rounded-full text-sm border border-accent/30 transform transition-all duration-300 group-hover:scale-110 hover:shadow-lg hover:shadow-purple-500/30">
-                        {contribution.rank}
-                      </span>
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <span className="text-cyan-400 font-medium transition-all duration-300 group-hover:text-cyan-300 group-hover:font-semibold text-sm sm:text-base lg:text-lg">{contribution.rank}</span>
+                      <span className="text-gray-500 text-sm sm:text-base lg:text-lg">•</span>
+                      <span className="text-sm sm:text-base lg:text-lg text-gray-400 transition-colors duration-300 group-hover:text-gray-300">{contribution.duration}</span>
                     </div>
                   </div>
                 </div>
@@ -107,30 +107,28 @@ const OpenSource = () => {
                 )}
                 
                 {/* Description */}
-                <p className="text-gray-300 mb-6 leading-relaxed transition-all duration-300 group-hover:text-gray-200 group-hover:font-medium">
+                <p className="text-gray-300 text-xs sm:text-sm lg:text-base leading-relaxed transition-all duration-300 group-hover:text-gray-200 group-hover:font-medium mb-4 sm:mb-6 lg:mb-8">
                   {contribution.description}
                 </p>
                 
-                {/* Enhanced Contributions List */}
-                <div className="mb-6">
-                  <h4 className="text-lg font-semibold text-white mb-3 transform transition-all duration-300 group-hover:scale-105 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-cyan-400 group-hover:bg-clip-text cursor-default">Key Contributions:</h4>
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {contribution.contributions.map((item, idx) => (
-                      <div 
+                {/* Enhanced Key Contributions */}
+                <div className="mb-4 sm:mb-6 lg:mb-8">
+                  <h4 className="text-sm sm:text-base lg:text-lg font-semibold text-purple-400 mb-2 sm:mb-3 transition-all duration-300 group-hover:text-purple-300 group-hover:scale-105">Key Contributions:</h4>
+                  <ul className="space-y-1 sm:space-y-2 lg:space-y-3">
+                    {contribution.keyContributions.map((contrib, idx) => (
+                      <li 
                         key={idx} 
-                        className="flex items-start gap-2 p-2 rounded-lg hover:bg-purple-900/20 transition-all duration-300 group/contribution"
+                        className="flex items-center gap-2 sm:gap-3 text-gray-300 text-xs sm:text-sm lg:text-base transition-all duration-300 group-hover:text-gray-200 group-hover:translate-x-1"
                         style={{
                           animationDelay: `${idx * 100}ms`,
                           animation: 'fadeInUp 0.6s ease-out forwards'
                         }}
                       >
-                        <svg className="w-5 h-5 text-accent mt-0.5 flex-shrink-0 transform transition-all duration-300 group-hover/contribution:scale-125 group-hover/contribution:rotate-12" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                        <span className="text-gray-300 text-sm transition-colors duration-300 group-hover/contribution:text-gray-200">{item}</span>
-                      </div>
+                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 lg:w-2.5 lg:h-2.5 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full transform transition-all duration-300 group-hover:scale-150 group-hover:rotate-180"></div>
+                        <span className="transition-all duration-300 group-hover:font-medium">{contrib}</span>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
                 
                 {/* Hover indicator line */}

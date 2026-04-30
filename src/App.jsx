@@ -13,7 +13,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-dark">
       <Navbar />
-      <main>
+      <main className="max-w-7xl xl:max-w-8xl 2xl:max-w-9xl mx-auto">
         <Hero />
         <About />
         <Skills />
