@@ -99,7 +99,7 @@ const OpenSource = () => {
                 {contribution.organization === 'GirlScript Summer of Code' && (
                   <div className="mb-6">
                     <img 
-                      src="/media/Simarjit Singh_Cert_Top Contributor_GSSoC2024Extd.png" 
+                      src="/Simarjit Singh_Cert_Top Contributor_GSSoC2024Extd.png" 
                       alt="GirlScript Summer of Code Certificate"
                       className="w-full max-w-md mx-auto rounded-lg border border-gray-700 hover:border-purple-500/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20"
                     />
