@@ -90,7 +90,7 @@ const OpenSource = () => {
                     <div className="flex items-center gap-2 sm:gap-3">
                       <span className="text-cyan-400 font-medium transition-all duration-300 group-hover:text-cyan-300 group-hover:font-semibold text-sm sm:text-base lg:text-lg">{contribution.rank}</span>
                       <span className="text-gray-500 text-sm sm:text-base lg:text-lg">•</span>
-                      <span className="text-sm sm:text-base lg:text-lg text-gray-400 transition-colors duration-300 group-hover:text-gray-300">{contribution.duration}</span>
+                      <span className="text-sm sm:text-base lg:text-lg text-gray-400 transition-colors duration-300 group-hover:text-gray-300">Active Contributor</span>
                     </div>
                   </div>
                 </div>
@@ -115,7 +115,7 @@ const OpenSource = () => {
                 <div className="mb-4 sm:mb-6 lg:mb-8">
                   <h4 className="text-sm sm:text-base lg:text-lg font-semibold text-purple-400 mb-2 sm:mb-3 transition-all duration-300 group-hover:text-purple-300 group-hover:scale-105">Key Contributions:</h4>
                   <ul className="space-y-1 sm:space-y-2 lg:space-y-3">
-                    {contribution.keyContributions.map((contrib, idx) => (
+                    {contribution.contributions.map((contrib, idx) => (
                       <li 
                         key={idx} 
                         className="flex items-center gap-2 sm:gap-3 text-gray-300 text-xs sm:text-sm lg:text-base transition-all duration-300 group-hover:text-gray-200 group-hover:translate-x-1"
